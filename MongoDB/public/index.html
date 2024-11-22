@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body
+    class="bg-gray-200 flex items-center justify-center h-screen bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto">
+        <div class="flex justify-center">
+            <div class="w-1/2">
+                <h1 class="text-2xl font-bold text-center">Todo List</h1>
+                <input type="text" class="w-full border p-2 my-2" id="todo" placeholder="Add a new todo">
+                <button class="bg-blue-500 text-white p-2 w-full" id="add" onclick='addToDo()'>Add</button>
+                <ul class="list-disc p-2" id="todos"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const todo = document.getElementById('todo');
+    const add = document.getElementById('add');
+    const todos = document.getElementById('todos');
+
+
+    addToDo = () => {
+        const li = document.createElement('li');
+        const cross = document.createElement('span');
+        cross.textContent = 'X';
+        li.textContent = todo.value;
+        todos.appendChild(li);
+        li.appendChild(cross);
+        li.style.cursor = 'pointer';
+        li.style.display = 'flex';
+        li.style.justifyContent = 'space-between';
+        li.style.alignItems = 'center';
+        li.style.border = '1px solid #ccc';
+        li.style.padding = '10px';
+        li.style.margin = '5px';
+        cross.addEventListener('click', () => {
+            li.remove();
+        });
+        fetch('http://localhost:3000/api/post', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                todo: todo.value
+            })
+        }).then(res => res.json()).then(data => {
+            todo.value = '';
+            console.log(data)
+        });
+    }
+</script>
+
+
+</html>
